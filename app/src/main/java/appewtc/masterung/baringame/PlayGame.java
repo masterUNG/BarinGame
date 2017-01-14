@@ -28,6 +28,19 @@ public class PlayGame extends AppCompatActivity {
 
         //Change View
         relativeLayout.setBackgroundResource(backgroundInts[indexAnInt]);
+        try {
+
+            SynQuestion synQuestion = new SynQuestion(PlayGame.this);
+            synQuestion.execute(Integer.toString(indexAnInt));
+            String strJSON = synQuestion.get();
+            if (strJSON.length() != 0) {
+                synQuestion.progressDialog.dismiss();
+            }
+            Log.d(tag, "JSON ==> " + strJSON);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }   // Main Method
