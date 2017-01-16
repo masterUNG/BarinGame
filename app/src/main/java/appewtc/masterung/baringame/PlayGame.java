@@ -3,6 +3,7 @@ package appewtc.masterung.baringame;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class PlayGame extends AppCompatActivity {
+public class PlayGame extends AppCompatActivity implements View.OnClickListener {
 
     //Explicit
     private RelativeLayout relativeLayout;
@@ -18,13 +19,14 @@ public class PlayGame extends AppCompatActivity {
     private String tag = "15janV1";
     private int[] backgroundInts = new int[]{R.drawable.bg0, R.drawable.bg1,
             R.drawable.bg2, R.drawable.bg3};
-    private TextView questionTextView;
+    private TextView questionTextView, scoreTextView, showTimeTextView;
     private Button[] buttons = new Button[4];
     private int[] buttonInts = new int[]{R.id.button2, R.id.button3,
             R.id.button4, R.id.button5};
     private String[] questionStrings, choice1Strings, choice2Strings,
             choice3Strings, choice4Strings, answerStrings;
-    private int indexTimes = 0;
+    private int indexTimes = 0; //  หมายถึงข้อ 0,1,2,3 ...
+    private int scoreAnInt = 0; // คะแนน
 
 
     @Override
@@ -38,6 +40,8 @@ public class PlayGame extends AppCompatActivity {
         for (int i = 0; i < buttonInts.length; i++) {
             buttons[i] = (Button) findViewById(buttonInts[i]);
         }
+        scoreTextView = (TextView) findViewById(R.id.textView);
+        showTimeTextView = (TextView) findViewById(R.id.textView2);
 
 
         //Setup
@@ -84,6 +88,11 @@ public class PlayGame extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //Button Controller
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setOnClickListener(PlayGame.this);
+        }
+
 
     }   // Main Method
 
@@ -97,4 +106,33 @@ public class PlayGame extends AppCompatActivity {
 
     }   // showView
 
+    @Override
+    public void onClick(View view) {
+
+        int i = 0;
+
+        switch (view.getId()) {
+            case R.id.button2:
+                i = 1;
+                break;
+            case R.id.button3:
+                i = 2;
+                break;
+            case R.id.button4:
+                i = 3;
+                break;
+            case R.id.button5:
+                i = 4;
+                break;
+        }
+
+        if (i == Integer.parseInt(answerStrings[indexTimes])) {
+            scoreAnInt += 1;
+            scoreTextView.setText("Score = " + Integer.toString(scoreAnInt));
+        }
+
+
+        indexTimes += 1;
+        showView();
+    }   // onClick
 }   // Main Class
