@@ -105,6 +105,11 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
     }   // Main Method
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
+
     private void myLoop() {
 
         if (aBoolean) {
@@ -181,5 +186,6 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         Intent intent = new Intent(PlayGame.this, ShowScore.class);
         intent.putExtra("Score", scoreAnInt);
         startActivity(intent);
+        finish();
     }
 }   // Main Class
