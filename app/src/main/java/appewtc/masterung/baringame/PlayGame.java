@@ -1,6 +1,8 @@
 package appewtc.masterung.baringame;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +29,9 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             choice3Strings, choice4Strings, answerStrings;
     private int indexTimes = 0; //  หมายถึงข้อ 0,1,2,3 ...
     private int scoreAnInt = 0; // คะแนน
+    private int total; // จำนวนข้อ
+    private boolean aBoolean = true;
+    private int startTime = 120;
 
 
     @Override
@@ -68,6 +73,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             choice3Strings = new String[jsonArray.length()];
             choice4Strings = new String[jsonArray.length()];
             answerStrings = new String[jsonArray.length()];
+            total = jsonArray.length();
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -94,7 +100,34 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         }
 
 
+        myLoop();
+
+
     }   // Main Method
+
+    private void myLoop() {
+
+        if (aBoolean) {
+
+            showTimeTextView.setText(Integer.toString(startTime) + " Sec");
+            startTime -= 1;
+
+            if (startTime == 0) {
+                showScore();
+            }
+
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    myLoop();
+                }
+            }, 1000);
+
+
+        }   //if
+    }   // myLoop
 
     private void showView() {
 
@@ -109,30 +142,44 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     @Override
     public void onClick(View view) {
 
-        int i = 0;
+        if (indexTimes < total) {
 
-        switch (view.getId()) {
-            case R.id.button2:
-                i = 1;
-                break;
-            case R.id.button3:
-                i = 2;
-                break;
-            case R.id.button4:
-                i = 3;
-                break;
-            case R.id.button5:
-                i = 4;
-                break;
+            int i = 0;
+
+            switch (view.getId()) {
+                case R.id.button2:
+                    i = 1;
+                    break;
+                case R.id.button3:
+                    i = 2;
+                    break;
+                case R.id.button4:
+                    i = 3;
+                    break;
+                case R.id.button5:
+                    i = 4;
+                    break;
+            }
+
+            if (i == Integer.parseInt(answerStrings[indexTimes])) {
+                scoreAnInt += 1;
+                scoreTextView.setText("Score = " + Integer.toString(scoreAnInt));
+            }
+
+
+            indexTimes += 1;
+            showView();
+
+        } else {
+            showScore();
         }
 
-        if (i == Integer.parseInt(answerStrings[indexTimes])) {
-            scoreAnInt += 1;
-            scoreTextView.setText("Score = " + Integer.toString(scoreAnInt));
-        }
 
-
-        indexTimes += 1;
-        showView();
     }   // onClick
+
+    private void showScore() {
+        Intent intent = new Intent(PlayGame.this, ShowScore.class);
+        intent.putExtra("Score", scoreAnInt);
+        startActivity(intent);
+    }
 }   // Main Class
