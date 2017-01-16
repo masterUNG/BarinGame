@@ -25,6 +25,13 @@ public class SynQuestion extends AsyncTask<String, Void, String>{
     }
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = ProgressDialog.show(context,
+                "Please Wait few Minus", "Continue Load Data");
+    }   // onPre
+
+    @Override
     protected String doInBackground(String... strings) {
 
         try {
@@ -48,11 +55,6 @@ public class SynQuestion extends AsyncTask<String, Void, String>{
 
     }   // doInBack
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        progressDialog = ProgressDialog.show(context, "Please Wait few Minus", "Continue Load Data");
-    }   // onPre
 
 
 }   // Main Class
